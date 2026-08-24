@@ -14,15 +14,20 @@
   <header class="topbar">
     <a class="brand" href="#inicio" aria-label="PulsoClima, inicio"><span class="brand-mark">P</span><span>Pulso<span>Clima</span></span></a>
     <nav aria-label="Navegación principal"><a class="active" href="#inicio">Inicio</a><a href="#pronostico">Pronóstico</a><a href="#comunidad">Comunidad</a></nav>
-    <div class="header-actions"><button class="ghost" data-message="El acceso de usuarios llegará en la próxima etapa">Ingresar</button><button class="primary" data-message="¡Gracias! Pronto podrás crear tu cuenta">Sumarme</button></div>
+    <div class="header-actions"><button class="ghost" id="login-open">Ingresar</button><button class="primary" id="signup-open">Crear cuenta</button><button class="user-chip" id="user-chip" hidden></button></div>
   </header>
   <main>
     <div class="page-shell" id="inicio">
       <section class="welcome"><div><p class="eyebrow">BUEN DÍA, COMUNIDAD</p><h1>El tiempo, <em>entre todos.</em></h1><p>Pronósticos confiables y reportes en vivo de personas que están ahí.</p></div><button class="report-btn" data-message="Muy pronto podrás enviar reportes desde tu localidad"><span>＋</span> Reportar el tiempo</button></section>
+      <section class="founder-panel" id="founder-panel" hidden>
+        <div><p class="eyebrow">PANEL DEL FUNDADOR</p><h2>Publicar el pronóstico oficial</h2><p>Este contenido aparecerá destacado para toda la comunidad.</p></div>
+        <form id="forecast-form"><label>Estado del tiempo<input name="conditions" placeholder="Parcialmente nublado" required></label><label>Temperatura<input name="temperature" type="number" placeholder="24" required></label><label>Resumen<textarea name="summary" placeholder="Tarde agradable, con algunas nubes..." required></textarea></label><button class="primary" type="submit">Publicar pronóstico</button></form>
+      </section>
       <section class="weather-card" id="pronostico">
         <div class="weather-main"><div class="weather-copy"><div class="location"><span>●</span> San Martín, Mendoza</div><div class="temperature"><span>24°</span><span class="weather-icon">🌤️</span></div><h2>Parcialmente nublado</h2><p>Sensación térmica 23° · Humedad 48%</p></div><div class="founder-card"><div class="avatar">CP</div><div><strong>Carlos · Fundador</strong><span>✓ Pronosticador verificado</span></div><p>“Tarde agradable, con algunas nubes. El viento sur podría sentirse después de las 18 h.”</p><small>Actualizado hoy, 9:15</small></div></div>
         <div class="forecast-row"><div class="forecast-day selected"><strong>Hoy</strong><span class="day-icon">🌤️</span><span>24° <small>12°</small></span></div><div class="forecast-day"><strong>Mar</strong><span class="day-icon">☀️</span><span>27° <small>13°</small></span></div><div class="forecast-day"><strong>Mié</strong><span class="day-icon">🌦️</span><span>22° <small>11°</small></span></div><div class="forecast-day"><strong>Jue</strong><span class="day-icon">☁️</span><span>19° <small>9°</small></span></div><div class="forecast-day"><strong>Vie</strong><span class="day-icon">☀️</span><span>25° <small>10°</small></span></div></div>
       </section>
+      <section class="quick-report" id="quick-report" hidden><div><p class="eyebrow">APORTÁ DESDE TU LOCALIDAD</p><h2>¿Qué está pasando ahora?</h2></div><form id="report-form"><select name="category" aria-label="Fenómeno"><option>Lluvia</option><option>Viento</option><option>Granizo</option><option>Niebla</option><option>Calor</option><option>Otro</option></select><input name="title" placeholder="Contanos brevemente" required><input name="locality" placeholder="Localidad" required><button class="report-btn" type="submit">Publicar reporte</button></form></section>
       <section class="content-grid" id="comunidad">
         <div><div class="section-heading"><div><p class="eyebrow">EN TIEMPO REAL</p><h2>Lo que pasa cerca tuyo</h2></div><button data-message="Mostrando los reportes más recientes">Ver todos →</button></div><div class="reports">
           <article class="report-card"><span class="report-icon">🌧️</span><div><strong>Lluvia suave en el centro</strong><p>San Martín, Mendoza</p><small>Hace 8 min</small></div><button data-message="Reporte de San Martín, Mendoza" aria-label="Abrir reporte de San Martín">›</button></article>
@@ -34,7 +39,10 @@
     </div>
   </main>
   <footer><div class="brand mini"><span class="brand-mark">P</span><span>Pulso<span>Clima</span></span></div><p>El tiempo lo contamos entre todos.</p><span>Nacido en San Martín, Mendoza 🇦🇷</span></footer>
+  <dialog class="auth-dialog" id="auth-dialog"><button class="dialog-close" id="dialog-close" aria-label="Cerrar">×</button><div class="auth-copy"><span class="brand-mark">P</span><p class="eyebrow">BIENVENIDO A PULSOCLIMA</p><h2 id="auth-title">Ingresar</h2><p id="auth-subtitle">Volvé a conectarte con tu comunidad.</p></div><form id="auth-form"><label>Nombre<input name="name" id="auth-name" autocomplete="name" placeholder="Tu nombre"></label><label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="nombre@correo.com"></label><label>Contraseña<input name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="Mínimo 6 caracteres"></label><label id="auth-locality-wrap">Localidad<input name="locality" placeholder="San Martín, Mendoza"></label><button class="primary" id="auth-submit" type="submit">Ingresar</button><button class="auth-switch" id="auth-switch" type="button">¿No tenés cuenta? Registrate</button><p class="form-status" id="auth-status" role="status"></p></form></dialog>
   <div class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
