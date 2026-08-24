@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulsoClima | El tiempo lo contamos entre todos</title>
+  <meta name="description" content="Pronósticos confiables y reportes meteorológicos de la comunidad en Argentina, Paraguay y Uruguay.">
+  <meta property="og:title" content="PulsoClima">
+  <meta property="og:description" content="El tiempo lo contamos entre todos.">
+  <meta property="og:image" content="assets/og.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="PulsoClima, inicio"><span class="brand-mark">P</span><span>Pulso<span>Clima</span></span></a>
+    <nav aria-label="Navegación principal"><a class="active" href="#inicio">Inicio</a><a href="#pronostico">Pronóstico</a><a href="#comunidad">Comunidad</a></nav>
+    <div class="header-actions"><button class="ghost" data-message="El acceso de usuarios llegará en la próxima etapa">Ingresar</button><button class="primary" data-message="¡Gracias! Pronto podrás crear tu cuenta">Sumarme</button></div>
+  </header>
+  <main>
+    <div class="page-shell" id="inicio">
+      <section class="welcome"><div><p class="eyebrow">BUEN DÍA, COMUNIDAD</p><h1>El tiempo, <em>entre todos.</em></h1><p>Pronósticos confiables y reportes en vivo de personas que están ahí.</p></div><button class="report-btn" data-message="Muy pronto podrás enviar reportes desde tu localidad"><span>＋</span> Reportar el tiempo</button></section>
+      <section class="weather-card" id="pronostico">
+        <div class="weather-main"><div class="weather-copy"><div class="location"><span>●</span> San Martín, Mendoza</div><div class="temperature"><span>24°</span><span class="weather-icon">🌤️</span></div><h2>Parcialmente nublado</h2><p>Sensación térmica 23° · Humedad 48%</p></div><div class="founder-card"><div class="avatar">CP</div><div><strong>Carlos · Fundador</strong><span>✓ Pronosticador verificado</span></div><p>“Tarde agradable, con algunas nubes. El viento sur podría sentirse después de las 18 h.”</p><small>Actualizado hoy, 9:15</small></div></div>
+        <div class="forecast-row"><div class="forecast-day selected"><strong>Hoy</strong><span class="day-icon">🌤️</span><span>24° <small>12°</small></span></div><div class="forecast-day"><strong>Mar</strong><span class="day-icon">☀️</span><span>27° <small>13°</small></span></div><div class="forecast-day"><strong>Mié</strong><span class="day-icon">🌦️</span><span>22° <small>11°</small></span></div><div class="forecast-day"><strong>Jue</strong><span class="day-icon">☁️</span><span>19° <small>9°</small></span></div><div class="forecast-day"><strong>Vie</strong><span class="day-icon">☀️</span><span>25° <small>10°</small></span></div></div>
+      </section>
+      <section class="content-grid" id="comunidad">
+        <div><div class="section-heading"><div><p class="eyebrow">EN TIEMPO REAL</p><h2>Lo que pasa cerca tuyo</h2></div><button data-message="Mostrando los reportes más recientes">Ver todos →</button></div><div class="reports">
+          <article class="report-card"><span class="report-icon">🌧️</span><div><strong>Lluvia suave en el centro</strong><p>San Martín, Mendoza</p><small>Hace 8 min</small></div><button data-message="Reporte de San Martín, Mendoza" aria-label="Abrir reporte de San Martín">›</button></article>
+          <article class="report-card"><span class="report-icon violet">💨</span><div><strong>Ráfagas fuertes del sur</strong><p>Maipú, Mendoza</p><small>Hace 21 min</small></div><button data-message="Reporte de Maipú, Mendoza" aria-label="Abrir reporte de Maipú">›</button></article>
+          <article class="report-card"><span class="report-icon slate">🌫️</span><div><strong>Visibilidad reducida</strong><p>Encarnación, Paraguay</p><small>Hace 34 min</small></div><button data-message="Reporte de Encarnación, Paraguay" aria-label="Abrir reporte de Encarnación">›</button></article>
+        </div></div>
+        <aside class="community-card"><span class="people">👥</span><p class="eyebrow">NUESTRA COMUNIDAD</p><h2>Somos los ojos del cielo</h2><p>Cada reporte ayuda a que otras personas estén mejor informadas y preparadas.</p><div class="stats"><div><strong>2.847</strong><span>miembros</span></div><div><strong>184</strong><span>reportes hoy</span></div></div><button id="join-button">Quiero ser parte</button></aside>
+      </section>
+    </div>
+  </main>
+  <footer><div class="brand mini"><span class="brand-mark">P</span><span>Pulso<span>Clima</span></span></div><p>El tiempo lo contamos entre todos.</p><span>Nacido en San Martín, Mendoza 🇦🇷</span></footer>
+  <div class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
