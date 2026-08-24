@@ -75,6 +75,46 @@ function escapeHtml(value) {
   return element.innerHTML;
 }
 
+const weatherCodes = {
+  0: ['Despejado', '☀️'], 1: ['Mayormente despejado', '🌤️'], 2: ['Parcialmente nublado', '⛅'], 3: ['Nublado', '☁️'],
+  45: ['Niebla', '🌫️'], 48: ['Niebla con escarcha', '🌫️'], 51: ['Llovizna leve', '🌦️'], 53: ['Llovizna', '🌦️'],
+  55: ['Llovizna intensa', '🌧️'], 61: ['Lluvia leve', '🌦️'], 63: ['Lluvia', '🌧️'], 65: ['Lluvia intensa', '🌧️'],
+  71: ['Nevada leve', '🌨️'], 73: ['Nevada', '🌨️'], 75: ['Nevada intensa', '🌨️'], 80: ['Chaparrones leves', '🌦️'],
+  81: ['Chaparrones', '🌧️'], 82: ['Chaparrones intensos', '⛈️'], 95: ['Tormenta', '⛈️'], 96: ['Tormenta con granizo', '⛈️'], 99: ['Tormenta fuerte con granizo', '⛈️']
+};
+
+function weatherLabel(code, isDay = 1) {
+  const result = weatherCodes[code] || ['Condiciones variables', '🌤️'];
+  if (!isDay && code <= 1) return [code === 0 ? 'Despejado' : 'Mayormente despejado', '🌙'];
+  return result;
+}
+
+async function loadAutomaticWeather() {
+  const endpoint = 'https://api.open-meteo.com/v1/forecast?latitude=-33.0834&longitude=-68.4731&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FArgentina%2FMendoza&forecast_days=5';
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error('Datos meteorológicos no disponibles');
+    const weather = await response.json();
+    const [description, icon] = weatherLabel(weather.current.weather_code, weather.current.is_day);
+    document.querySelector('.temperature>span:first-child').textContent = `${Math.round(weather.current.temperature_2m)}°`;
+    document.querySelector('.weather-icon').textContent = icon;
+    document.querySelector('.weather-copy h2').textContent = description;
+    document.querySelector('.weather-copy>p').textContent = `Sensación térmica ${Math.round(weather.current.apparent_temperature)}° · Humedad ${weather.current.relative_humidity_2m}% · Actualización automática`;
+
+    const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    document.querySelectorAll('.forecast-day').forEach((element, index) => {
+      if (!weather.daily.time[index]) return;
+      const date = new Date(`${weather.daily.time[index]}T12:00:00`);
+      const [, dayIcon] = weatherLabel(weather.daily.weather_code[index]);
+      element.querySelector('strong').textContent = index === 0 ? 'Hoy' : dayNames[date.getDay()];
+      element.querySelector('.day-icon').textContent = dayIcon;
+      element.querySelector('span:last-child').innerHTML = `${Math.round(weather.daily.temperature_2m_max[index])}° <small>${Math.round(weather.daily.temperature_2m_min[index])}°</small>`;
+    });
+  } catch (error) {
+    console.warn('PulsoClima conserva el último pronóstico disponible.', error);
+  }
+}
+
 document.querySelector('#login-open').addEventListener('click', () => openAuth('login'));
 document.querySelector('#signup-open').addEventListener('click', () => openAuth('signup'));
 document.querySelector('#dialog-close').addEventListener('click', () => authDialog.close());
@@ -119,4 +159,5 @@ document.querySelector('#forecast-form').addEventListener('submit', async (event
 
 client.auth.onAuthStateChange((_event, session) => updateSession(session));
 client.auth.getSession().then(({ data }) => updateSession(data.session));
-loadCommunityData();
+loadCommunityData().finally(loadAutomaticWeather);
+window.setInterval(loadAutomaticWeather, 15 * 60 * 1000);
