@@ -97,21 +97,24 @@ authForm.addEventListener('submit', async (event) => {
 
 document.querySelector('#report-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form));
   const { data: { user } } = await client.auth.getUser();
   if (!user) return openAuth('login');
-  const values = Object.fromEntries(new FormData(event.currentTarget));
   const { error } = await client.from('reports').insert({ user_id: user.id, category: values.category, title: values.title, locality: values.locality, country: 'Argentina' });
   if (error) return showMessage(`No se pudo publicar: ${error.message}`);
-  event.currentTarget.reset(); showMessage('Reporte publicado'); loadCommunityData();
+  form.reset(); showMessage('Reporte publicado'); loadCommunityData();
 });
 
 document.querySelector('#forecast-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form));
   const { data: { user } } = await client.auth.getUser();
-  const values = Object.fromEntries(new FormData(event.currentTarget));
+  if (!user) return openAuth('login');
   const { error } = await client.rpc('publish_forecast', { p_conditions: values.conditions, p_temperature: Number(values.temperature), p_summary: values.summary });
   if (error) return showMessage(`No se pudo publicar: ${error.message}`);
-  event.currentTarget.reset(); showMessage('Pronóstico oficial publicado'); loadCommunityData();
+  form.reset(); showMessage('Pronóstico oficial publicado'); loadCommunityData();
 });
 
 client.auth.onAuthStateChange((_event, session) => updateSession(session));
