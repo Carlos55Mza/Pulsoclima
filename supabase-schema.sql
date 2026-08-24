@@ -68,5 +68,38 @@ create trigger on_auth_user_created after insert on auth.users for each row exec
 create index if not exists reports_created_at_idx on public.reports (created_at desc);
 create index if not exists forecasts_published_at_idx on public.forecasts (published_at desc);
 
+create or replace function public.publish_forecast(
+  p_conditions text,
+  p_temperature integer,
+  p_summary text
+)
+returns public.forecasts
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  created_forecast public.forecasts;
+begin
+  if not exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'founder'
+  ) then
+    raise exception 'Solo la cuenta fundadora puede publicar pronósticos';
+  end if;
+
+  insert into public.forecasts (
+    conditions, temperature, summary, location, published_by
+  ) values (
+    p_conditions, p_temperature, p_summary, 'San Martín, Mendoza', auth.uid()
+  ) returning * into created_forecast;
+
+  return created_forecast;
+end;
+$$;
+
+revoke all on function public.publish_forecast(text, integer, text) from public;
+grant execute on function public.publish_forecast(text, integer, text) to authenticated;
+
 -- Después de registrar tu propia cuenta, ejecutá esta línea reemplazando el correo:
 -- update public.profiles set role = 'founder' where id = (select id from auth.users where email = 'TU_CORREO');

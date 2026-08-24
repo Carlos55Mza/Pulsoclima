@@ -109,7 +109,7 @@ document.querySelector('#forecast-form').addEventListener('submit', async (event
   event.preventDefault();
   const { data: { user } } = await client.auth.getUser();
   const values = Object.fromEntries(new FormData(event.currentTarget));
-  const { error } = await client.from('forecasts').insert({ conditions: values.conditions, temperature: Number(values.temperature), summary: values.summary, published_by: user.id, location: 'San Martín, Mendoza' });
+  const { error } = await client.rpc('publish_forecast', { p_conditions: values.conditions, p_temperature: Number(values.temperature), p_summary: values.summary });
   if (error) return showMessage(`No se pudo publicar: ${error.message}`);
   event.currentTarget.reset(); showMessage('Pronóstico oficial publicado'); loadCommunityData();
 });
